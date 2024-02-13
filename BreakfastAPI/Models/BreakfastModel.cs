@@ -1,8 +1,8 @@
-using BuberBreakfast.Contracts.Breakfast;
-using BuberBreakfast.Services.Errors;
+using BreakfastAPI.Contracts.Breakfast;
+using BreakfastAPI.Services.Errors;
 using ErrorOr;
 
-namespace BuberBreakfast.Models
+namespace BreakfastAPI.Models
 {
     public class Breakfast
     {

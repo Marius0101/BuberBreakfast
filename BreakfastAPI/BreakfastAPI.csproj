@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk.Web">
 
   <ItemGroup>
-    <ProjectReference Include="..\BuberBreakfast.Contracts\BuberBreakfast.Contracts.csproj" />
+    <ProjectReference Include="..\BreakfastAPI.Contracts\BreakfastAPI.Contracts.csproj" />
   </ItemGroup>
 
   <ItemGroup>

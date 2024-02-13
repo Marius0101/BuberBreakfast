@@ -1,6 +1,6 @@
 using ErrorOr;
 
-namespace BuberBreakfast.Services.Errors;
+namespace BreakfastAPI.Services.Errors;
 
 public static class Errors
 {

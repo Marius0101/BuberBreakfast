@@ -1,11 +1,11 @@
 
-using BuberBreakfast.Contracts.Breakfast;
-using BuberBreakfast.Models;
-using BuberBreakfast.Services.Breakfasts;
-using BuberBreakfast.Services.Errors;
+using BreakfastAPI.Contracts.Breakfast;
+using BreakfastAPI.Models;
+using BreakfastAPI.Services.Breakfasts;
+using BreakfastAPI.Services.Errors;
 using Microsoft.AspNetCore.Mvc;
 
-namespace BuberBreakfast.Controllers
+namespace BreakfastAPI.Controllers
 {
     [Route("breakfast")]
     public class BreakfastControllers : ApiController

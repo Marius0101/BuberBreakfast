@@ -1,6 +1,6 @@
 using System.Runtime.CompilerServices;
 
-namespace BuberBreakfast.Contracts.Breakfast;
+namespace BreakfastAPI.Contracts.Breakfast;
 
 public record struct UpsertBreakfastResponse
 (

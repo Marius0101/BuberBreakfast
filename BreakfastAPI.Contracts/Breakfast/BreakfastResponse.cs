@@ -1,5 +1,5 @@
 
-namespace BuberBreakfast.Contracts.Breakfast
+namespace BreakfastAPI.Contracts.Breakfast
 {
     public record BreakfastResponse(
         Guid Id,

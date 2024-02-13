@@ -1,4 +1,4 @@
-using BuberBreakfast.Services.Breakfasts;
+using BreakfastAPI.Services.Breakfasts;
 using Microsoft.OpenApi.Models;
 
 

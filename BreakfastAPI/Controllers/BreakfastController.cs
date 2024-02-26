@@ -28,7 +28,6 @@ namespace BreakfastAPI.Controllers
             }
             var breakfast = validationBreakfastResult.Value;
 
-            //TODO : save breakfast to a real database 
             var createBreakfastResult = _breakfastService.CreateBreakfast(breakfast);
             
             return createBreakfastResult.Match(

@@ -85,9 +85,7 @@ namespace BreakfastAPI.Controllers
                 breakfast.Id,
                 breakfast.Name,
                 breakfast.Description,
-                breakfast.StartDateTime,
-                breakfast.EndDateTime,
-                breakfast.LastUpdateTime,
+                breakfast.Availability,
                 breakfast.Savory,
                 breakfast.Sweet
             );

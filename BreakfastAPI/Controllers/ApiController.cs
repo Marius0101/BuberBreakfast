@@ -10,7 +10,7 @@ namespace BreakfastAPI.Controllers
     {
         protected IActionResult Problem(List<Error> errors)
         {
-            if (errors.All(error => error.Type == ErrorType.Validation)){
+            if (errors.TrueForAll(error => error.Type == ErrorType.Validation)){
                 var modelStateDictionary = new ModelStateDictionary();
 
                 foreach (var error in errors)
@@ -20,7 +20,7 @@ namespace BreakfastAPI.Controllers
                 return ValidationProblem(modelStateDictionary);
             }
 
-            if (errors.Any(error => error.Type == ErrorType.Unexpected))
+            if (errors.Exists(error => error.Type == ErrorType.Unexpected))
             {
                 return Problem();
             }

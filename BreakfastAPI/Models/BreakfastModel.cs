@@ -1,4 +1,6 @@
+
 using BreakfastAPI.Contracts.Breakfast;
+using BreakfastAPI.Contracts.Common;
 using BreakfastAPI.Services.Errors;
 using ErrorOr;
 
@@ -11,9 +13,7 @@ namespace BreakfastAPI.Models
         public Guid Id {get;}
         public string Name {get;}
         public string Description {get;}
-        public DateTime StartDateTime {get;}
-        public DateTime EndDateTime {get;}
-        public DateTime LastUpdateTime {get;}
+        public TimeInterval Availability {get;}
         public List<string> Savory {get;}
         public List<string> Sweet  {get;}
         
@@ -31,18 +31,14 @@ namespace BreakfastAPI.Models
             Guid id,
             string name,
             string description,
-            DateTime startDateTime,
-            DateTime endDateTime,
-            DateTime lastUpdateTime,
+            TimeInterval availability,
             List<string> savory,
             List<string> sweet)
         {
             Id = id;
             Name = name;
             Description = description;
-            StartDateTime = startDateTime;
-            EndDateTime = endDateTime;
-            LastUpdateTime = lastUpdateTime;
+            Availability= availability;
             Savory = savory;
             Sweet = sweet;
         }
@@ -50,8 +46,7 @@ namespace BreakfastAPI.Models
         public static ErrorOr<Breakfast> Create(
             string name,
             string description,
-            DateTime startDateTime,
-            DateTime endDateTime,
+            TimeInterval availability,
             List<string> savory,
             List<string> sweet,
             Guid? id = null
@@ -78,9 +73,7 @@ namespace BreakfastAPI.Models
                 id ?? Guid.NewGuid(),
                 name,
                 description,
-                startDateTime,
-                endDateTime,
-                DateTime.UtcNow,
+                availability,
                 savory,
                 sweet
             );
@@ -91,8 +84,7 @@ namespace BreakfastAPI.Models
             return Create(
                 request.Name,
                 request.Description,
-                request.StartDateTime,
-                request.EndDateTime,
+                availability: request.Availability,
                 request.Savory,
                 request.Sweet
             );
@@ -103,8 +95,7 @@ namespace BreakfastAPI.Models
             return Create(
                 request.Name,
                 request.Description,
-                request.StartDateTime,
-                request.EndDateTime,
+                availability: request.Availability,
                 request.Savory,
                 request.Sweet,
                 id

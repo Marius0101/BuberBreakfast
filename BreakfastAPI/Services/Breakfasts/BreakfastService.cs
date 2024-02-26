@@ -21,9 +21,10 @@ public class BreakfastService: IBreakfeastService
         return Result.Deleted;
     }
 
-    public ErrorOr<Breakfast> GetBreakfast(Guid breakfastId){
+    public ErrorOr<Breakfast> GetBreakfast(Guid id)
+    {
 
-        if(_breakfasts.TryGetValue(breakfastId, out var breakfast)){
+        if(_breakfasts.TryGetValue(id, out var breakfast)){
             return breakfast;
         }
         return Errors.Errors.Breakfast.NotFound;

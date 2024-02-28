@@ -10,7 +10,8 @@ namespace BreakfastAPI.Controllers
     {
         protected IActionResult Problem(List<Error> errors)
         {
-            if (errors.TrueForAll(error => error.Type == ErrorType.Validation)){
+            if (errors.TrueForAll(error => error.Type == ErrorType.Validation))
+            {
                 var modelStateDictionary = new ModelStateDictionary();
 
                 foreach (var error in errors)

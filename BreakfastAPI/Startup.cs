@@ -13,7 +13,7 @@ namespace BreakfastAPI
             });
 
             services.AddControllers();
-            services.AddScoped<IBreakfeastService, BreakfastService>();
+            services.AddScoped<IBreakfastControllerService, BreakfastControllerService>();
         }
 
         public void Configure(IApplicationBuilder app)

@@ -10,12 +10,12 @@ namespace BreakfastAPI.Models
     {
         #region Variable
 
-        public Guid Id {get;}
-        public string Name {get;}
-        public string Description {get;}
-        public TimeInterval Availability {get;}
-        public List<string> Savory {get;}
-        public List<string> Sweet  {get;}
+        public Guid Id { get; set; }
+        public string Name {get; set; }
+        public string Description {get; set; }
+        public TimeInterval Availability {get; set;}
+        public List<string> Savory {get; set; }
+        public List<string> Sweet  {get; set; }
         
         #endregion
 
@@ -27,7 +27,7 @@ namespace BreakfastAPI.Models
         public const int maxDescriptionLenght = 200;
         #endregion
 
-        private Breakfast(
+        protected Breakfast(
             Guid id,
             string name,
             string description,

@@ -10,9 +10,9 @@ namespace BreakfastAPI.Controllers
     [Route("breakfast")]
     public class BreakfastControllers : ApiController
     {
-        private readonly IBreakfeastService _breakfastService;
+        private readonly IBreakfastControllerService _breakfastService;
 
-        public BreakfastControllers(IBreakfeastService breakfastService){
+        public BreakfastControllers(IBreakfastControllerService breakfastService){
             _breakfastService= breakfastService;
         }
 
@@ -37,11 +37,11 @@ namespace BreakfastAPI.Controllers
         }
 
         [HttpGet("{id:guid}")]
-        public IActionResult GetBreakfast(Guid id)
+        public IActionResult GetBreakfastByID(Guid id)
         {
-            var getBreakfastResult = _breakfastService.GetBreakfast(id);
+            var GetBreakfastByIDResult = _breakfastService.GetBreakfastByID(id);
 
-            return getBreakfastResult.Match(
+            return GetBreakfastByIDResult.Match(
                 breakfeast =>Ok(MapBreakfastResponse(breakfeast)),
                 errors => Problem(errors));
         }
@@ -96,7 +96,7 @@ namespace BreakfastAPI.Controllers
         [HttpGet]
         public CreatedAtActionResult CreateATGetBreakfeast(Breakfast breakfast){
             return CreatedAtAction(
-                actionName:  nameof(GetBreakfast),
+                actionName:  nameof(GetBreakfastByID),
                 routeValues: new { id = breakfast.Id },
                 value:       MapBreakfastResponse(breakfast)
                 );

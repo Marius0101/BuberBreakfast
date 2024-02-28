@@ -4,7 +4,7 @@ using BreakfastAPI.Contracts.Breakfast;
 
 namespace BreakfastAPI.Services.Breakfasts;
 
-public class BreakfastService: IBreakfeastService
+public class BreakfastControllerService: IBreakfastControllerService
 {
     private static readonly Dictionary<Guid, Breakfast> _breakfasts = new();
     public ErrorOr<Created> CreateBreakfast(Breakfast breakfast)
@@ -21,7 +21,7 @@ public class BreakfastService: IBreakfeastService
         return Result.Deleted;
     }
 
-    public ErrorOr<Breakfast> GetBreakfast(Guid id)
+    public ErrorOr<Breakfast> GetBreakfastByID(Guid id)
     {
 
         if(_breakfasts.TryGetValue(id, out var breakfast)){

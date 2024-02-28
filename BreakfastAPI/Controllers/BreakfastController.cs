@@ -10,10 +10,13 @@ namespace BreakfastAPI.Controllers
     [Route("breakfast")]
     public class BreakfastControllers : ApiController
     {
-        private readonly IBreakfastControllerService _breakfastService;
+        private readonly IBreakfastControllerService _breakfastControlerService;
+        private readonly IBreakfastService _breakfastService;
 
-        public BreakfastControllers(IBreakfastControllerService breakfastService){
-            _breakfastService= breakfastService;
+        public BreakfastControllers(IBreakfastControllerService breakfastControllerService , IBreakfastService breakfastService = null)
+        {
+            _breakfastControlerService = breakfastControllerService;
+            _breakfastService = breakfastService;
         }
 
         #region Endpoints
@@ -21,14 +24,14 @@ namespace BreakfastAPI.Controllers
         [HttpPost]
         public IActionResult CreateBreakfast(CreateBreakfastRequest request)
         {
-            var validationBreakfastResult = Breakfast.From(request);
+            var validationBreakfastResult = _breakfastService.From(request);
 
             if (validationBreakfastResult.IsError){
                 return Problem(validationBreakfastResult.Errors);
             }
             var breakfast = validationBreakfastResult.Value;
 
-            var createBreakfastResult = _breakfastService.CreateBreakfast(breakfast);
+            var createBreakfastResult = _breakfastControlerService.CreateBreakfast(breakfast);
             
             return createBreakfastResult.Match(
                 created => CreateATGetBreakfeast(breakfast),
@@ -39,7 +42,7 @@ namespace BreakfastAPI.Controllers
         [HttpGet("{id:guid}")]
         public IActionResult GetBreakfastByID(Guid id)
         {
-            var GetBreakfastByIDResult = _breakfastService.GetBreakfastByID(id);
+            var GetBreakfastByIDResult = _breakfastControlerService.GetBreakfastByID(id);
 
             return GetBreakfastByIDResult.Match(
                 breakfeast =>Ok(MapBreakfastResponse(breakfeast)),
@@ -49,14 +52,14 @@ namespace BreakfastAPI.Controllers
         [HttpPut("{id:guid}")]
         public IActionResult UpsertBreakfast(Guid id,UpsertBreakfastRequest request)
         {
-            var validationBreakfastResult = Breakfast.From(id ,request);
+            var validationBreakfastResult = _breakfastService.From(id ,request);
             
             if (validationBreakfastResult.IsError)
             {
                 return Problem(errors: validationBreakfastResult.Errors);
             }
             var breakfast = validationBreakfastResult.Value;
-            var upsertResponse = _breakfastService.UpsertBreakfast(breakfast);
+            var upsertResponse = _breakfastControlerService.UpsertBreakfast(breakfast);
 
             return upsertResponse.Match(
                 response => response.isNewlyCreated ? CreateATGetBreakfeast(breakfast) : NoContent(),
@@ -67,7 +70,7 @@ namespace BreakfastAPI.Controllers
         [HttpDelete("{id:guid}")]
         public IActionResult DeleteBreakfast(Guid id)
         {
-            var deleteResult =_breakfastService.DeleteBreakfast(id);
+            var deleteResult = _breakfastControlerService.DeleteBreakfast(id);
 
             return deleteResult.Match(
                 deleted => NoContent(),

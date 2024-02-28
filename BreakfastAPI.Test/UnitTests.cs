@@ -1,4 +1,5 @@
-using BreakfastAPI.Contracts.Breakfast;
+﻿using BreakfastAPI.Contracts.Breakfast;
+using BreakfastAPI.Contracts.Common;
 using BreakfastAPI.Controllers;
 using BreakfastAPI.Models;
 using BreakfastAPI.Services.Breakfasts;
@@ -18,15 +19,36 @@ namespace BreakfastAPI.Test
         [TestMethod]
         public void GetBreakfastByID_Return200WithItem()
         {
-            var mockService = new Mock<IBreakfastControllerService>();
-            mockService.Setup(service => service.GetBreakfastByID(It.IsAny<Guid>()))
-                       .Returns(Breakfast.Create(
+            var mockServiceController = new Mock<IBreakfastControllerService>();
+            var mockService = new Mock<IBreakfastService>();
+
+            mockService.Setup(service =>service.Create(
+                "Test",
+                "A really long sentence for my 50 long description.",
+                null,
+                null,
+                null,
+                It.IsAny<Guid>()
+            )).Returns((string name, string description, TimeInterval availability, List<string> savory, List<string> sweet, Guid? id) =>
+            new Breakfast(
+                 id ?? Guid.Empty, // Utilizați id-ul primit sau un Guid gol
+                 name,
+                 description,
+                availability,
+                savory,
+                sweet
+            ));
+            mockServiceController.Setup(service => service.GetBreakfastByID(It.IsAny<Guid>()))
+                       .Returns((Guid id) => mockService.Object.Create(
                            name: "Test",
-                           description : "A really long sentence for my 50 long description.",
-                           availability : null,
-                           savory : null,
-                           sweet : null));
-            var controller = new BreakfastControllers(mockService.Object);
+                           description: "A really long sentence for my 50 long description.",
+                           availability: null,
+                           savory: null,
+                           sweet: null,
+                           id: id
+                           ));
+        
+            var controller = new BreakfastControllers(mockServiceController.Object, mockService.Object);
 
             var result = controller.GetBreakfastByID(Guid.NewGuid());
 
@@ -41,7 +63,7 @@ namespace BreakfastAPI.Test
         {
             var mockService = new Mock<IBreakfastControllerService>();
             mockService.Setup(service => service.GetBreakfastByID(It.IsAny<Guid>()))
-                                                .Returns(Errors.Breakfast.NotFound);
+                                                .Returns(BreakfastErrors.NotFound);
             var controller = new BreakfastControllers(mockService.Object);
 
             var result = controller.GetBreakfastByID(Guid.NewGuid());
@@ -57,7 +79,21 @@ namespace BreakfastAPI.Test
         [TestMethod]
         public void CreateBreakfastCorrectly_Return201WithBreakfastResponse()
         {
-            var mockService = new Mock<IBreakfastControllerService>();
+            var mockServiceController = new Mock<IBreakfastControllerService>();
+            var mockService = new Mock<IBreakfastService>();
+            mockService.Setup(service => service.From(It.IsAny<CreateBreakfastRequest>()))
+                .Returns((CreateBreakfastRequest request) =>
+                {
+                    var breakfast = new Breakfast(
+                    Guid.NewGuid(),
+                    request.Name,
+                    request.Description,
+                    request.Availability,
+                    request.Savory,
+                    request.Sweet
+                    );
+                    return breakfast;
+                });
             var request = new CreateBreakfastRequest
             (
                 Name:        "Test",
@@ -66,7 +102,7 @@ namespace BreakfastAPI.Test
                 Savory:       null,
                 Sweet:        null
             );   
-            var controller = new BreakfastControllers(mockService.Object);
+            var controller = new BreakfastControllers(mockServiceController.Object,mockService.Object);
 
             var result = controller.CreateBreakfast(request);
 
@@ -77,9 +113,12 @@ namespace BreakfastAPI.Test
         }
 
         [TestMethod]
-        public void CreateBreakfastWithShortName_ReturnValidationProblem()
+        public void CreateBreakfastWithInvalidName_ReturnValidationProblem()
         {
-            var mockService = new Mock<IBreakfastControllerService>();
+            var mockServiceController = new Mock<IBreakfastControllerService>();
+            var mockService = new Mock<IBreakfastService>();
+            mockService.Setup(service => service.From(It.IsAny<CreateBreakfastRequest>()))
+                .Returns(BreakfastErrors.InvalidName);
             var request = new CreateBreakfastRequest
             (
                 Name: "Te",
@@ -88,7 +127,7 @@ namespace BreakfastAPI.Test
                 Savory: null,
                 Sweet: null
             );
-            var controller = new BreakfastControllers(mockService.Object);
+            var controller = new BreakfastControllers(mockServiceController.Object,mockService.Object);
 
             var result = controller.CreateBreakfast(request);
 
@@ -96,12 +135,15 @@ namespace BreakfastAPI.Test
             var objectResult = result as ObjectResult;
             Assert.IsInstanceOfType<ValidationProblemDetails>(objectResult.Value);
         }
+
         [TestMethod]
-        public void CreateBreakfastWithLongName_ReturnValidationProblem()
+        public void CreateBreakfastWithInvalidDescription_ReturnValidationProblem()
         {
-            var mockService = new Mock<IBreakfastControllerService>();
-            var mockValidationResult = new Mock<Breakfast>();
-            
+            var mockServiceController = new Mock<IBreakfastControllerService>();
+            var mockService = new Mock<IBreakfastService>();
+            mockService.Setup(service => service.From(It.IsAny<CreateBreakfastRequest>()))
+                .Returns(BreakfastErrors.InvalidDescription);
+
             var request = new CreateBreakfastRequest
             (
                 Name: "Te",
@@ -110,7 +152,7 @@ namespace BreakfastAPI.Test
                 Savory: null,
                 Sweet: null
             );
-            var controller = new BreakfastControllers(mockService.Object);
+            var controller = new BreakfastControllers(mockServiceController.Object, mockService.Object);
 
             var result = controller.CreateBreakfast(request);
 

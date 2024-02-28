@@ -2,9 +2,8 @@ using ErrorOr;
 
 namespace BreakfastAPI.Services.Errors;
 
-public static class Errors
-{
-    public static class Breakfast
+
+    public static class BreakfastErrors
     {
         public static Error InvalidName => Error.Validation(
             code:           "Breakfast.InvalidName",
@@ -23,4 +22,3 @@ public static class Errors
             description:    "The breakfast was not found in the database."
         );
     }
-}

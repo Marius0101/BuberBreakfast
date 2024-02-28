@@ -27,7 +27,7 @@ public class BreakfastControllerService: IBreakfastControllerService
         if(_breakfasts.TryGetValue(id, out var breakfast)){
             return breakfast;
         }
-        return Errors.Errors.Breakfast.NotFound;
+        return Errors.BreakfastErrors.NotFound;
     }
 
     public ErrorOr<UpsertBreakfastResponse> UpsertBreakfast(Breakfast breakfast)

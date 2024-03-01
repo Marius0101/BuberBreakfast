@@ -1,4 +1,5 @@
 ﻿using BreakfastAPI.Contracts.Breakfast;
+using BreakfastAPI.Contracts.Common;
 using BreakfastAPI.Models;
 using BreakfastAPI.Services.Breakfasts;
 using BreakfastAPI.Services.Errors;
@@ -13,7 +14,7 @@ using System.Threading.Tasks;
 namespace BreakfastAPI.UnitTest
 {
     [TestClass]
-    public class Service
+    public class Interface
     {
         #region IBreakfastControllerService Tests
 
@@ -269,7 +270,255 @@ namespace BreakfastAPI.UnitTest
 
         #region IBreakfastService Tests
 
-        #region
+        #region Create Tests
+
+        [TestMethod]
+        public void Create_WithGuid_ReturnCreated()
+        {
+            // Arrange
+            var breakfastServiceMock = new Mock<IBreakfastService>();
+            var breakfast = new Breakfast(Guid.NewGuid(), "", "", null, null, null);
+            var errorOrBreakfast = new ErrorOr<Breakfast>();
+            
+            breakfastServiceMock.Setup(service => service.Create(
+                    It.IsAny<string>(),
+                    It.IsAny<string>(),
+                    It.IsAny<TimeInterval>(),
+                    It.IsAny<List<String>>(),
+                    It.IsAny<List<String>>(),
+                    It.IsAny<Guid>()
+                    )
+                    ).Returns(breakfast);
+            var serviceUnderTest = breakfastServiceMock.Object;
+
+            // Act
+            var result = serviceUnderTest.Create("", "", null, null, null, Guid.NewGuid());
+
+            // Assert
+            Assert.IsInstanceOfType<ErrorOr<Breakfast>>(result);
+            Assert.IsInstanceOfType<Breakfast>(result.Value);
+            Assert.IsFalse(result.IsError);
+            Assert.IsTrue(result.ErrorsOrEmptyList.Count == 0);
+        }
+
+        [TestMethod]
+        public void Create_WithoutGuid_ReturnCreated()
+        {
+            // Arrange
+            var breakfastServiceMock = new Mock<IBreakfastService>();
+            var breakfast = new Breakfast(Guid.NewGuid(), "", "", null, null, null);
+            var errorOrBreakfast = new ErrorOr<Breakfast>();
+
+            breakfastServiceMock.Setup(service => service.Create(
+                    It.IsAny<string>(),
+                    It.IsAny<string>(),
+                    It.IsAny<TimeInterval>(),
+                    It.IsAny<List<String>>(),
+                    It.IsAny<List<String>>(),
+                    null
+                    )
+                    ).Returns(breakfast);
+            var serviceUnderTest = breakfastServiceMock.Object;
+
+            // Act
+            var result = serviceUnderTest.Create("", "", null, null, null);
+
+            // Assert
+            Assert.IsInstanceOfType<ErrorOr<Breakfast>>(result);
+            Assert.IsInstanceOfType<Breakfast>(result.Value);
+            Assert.IsFalse(result.IsError);
+            Assert.IsTrue(result.ErrorsOrEmptyList.Count == 0);
+        }
+
+        [TestMethod]
+        public void Create_ReturnError()
+        {
+            // Arrange
+            var breakfastServiceMock = new Mock<IBreakfastService>();
+            breakfastServiceMock.Setup(service => service.Create(
+                    It.IsAny<string>(),
+                    It.IsAny<string>(),
+                    It.IsAny<TimeInterval>(),
+                    It.IsAny<List<String>>(),
+                    It.IsAny<List<String>>(),
+                    It.IsAny<Guid>()
+                    )
+                    ).Returns(new Error());
+            var serviceUnderTest = breakfastServiceMock.Object;
+
+            // Act
+            var result = serviceUnderTest.Create("", "", null, null, null, Guid.NewGuid());
+
+            // Assert
+            Assert.IsInstanceOfType<ErrorOr<Breakfast>>(result);
+            Assert.IsNull(result.Value);
+            Assert.IsTrue(result.IsError);
+            Assert.IsTrue(result.ErrorsOrEmptyList.Count == 1);
+        }
+
+        [TestMethod]
+        public void Create_ReturnListError()
+        {
+            // Arrange
+            var breakfastServiceMock = new Mock<IBreakfastService>();
+            breakfastServiceMock.Setup(service => service.Create(
+                    It.IsAny<string>(),
+                    It.IsAny<string>(),
+                    It.IsAny<TimeInterval>(),
+                    It.IsAny<List<String>>(),
+                    It.IsAny<List<String>>(),
+                    It.IsAny<Guid>()
+                    )
+                    ).Returns(new List<Error>() { new Error(), new Error()});
+
+            var serviceUnderTest = breakfastServiceMock.Object;
+
+            // Act
+            var result = serviceUnderTest.Create("", "", null, null, null, Guid.NewGuid());
+
+            // Assert
+            Assert.IsInstanceOfType<ErrorOr<Breakfast>>(result);
+            Assert.IsNull(result.Value);
+            Assert.IsTrue(result.IsError);
+            Assert.IsTrue(result.ErrorsOrEmptyList.Count >= 2);
+        }
+
+        #endregion Create Tests
+
+        #region From Tests
+
+        [TestMethod]
+        public void From_WithCreateBreakfastRequest_ReturnBreakfast()
+        {
+            // Arrange
+            var breakfastServiceMock = new Mock<IBreakfastService>();
+            var breakfast = new Breakfast(Guid.NewGuid(), "", "", null, null, null);
+            breakfastServiceMock.Setup(service => service.From(It.IsAny<CreateBreakfastRequest>())
+                    ).Returns(breakfast);
+
+            var serviceUnderTest = breakfastServiceMock.Object;
+
+            // Act
+            var result = serviceUnderTest.From(new CreateBreakfastRequest("","",null, null,null));
+
+            // Assert
+            Assert.IsInstanceOfType<ErrorOr<Breakfast>>(result);
+            Assert.IsInstanceOfType<Breakfast>(result.Value);
+            Assert.IsFalse(result.IsError);
+            Assert.IsTrue(result.ErrorsOrEmptyList.Count == 0);
+        }
+
+        [TestMethod]
+        public void From_WithCreateBreakfastRequest_ReturnError()
+        {
+            // Arrange
+            var breakfastServiceMock = new Mock<IBreakfastService>();
+            breakfastServiceMock.Setup(service => service.From(It.IsAny<CreateBreakfastRequest>())
+                    ).Returns(new Error());
+
+            var serviceUnderTest = breakfastServiceMock.Object;
+
+            // Act
+            var result = serviceUnderTest.From(new CreateBreakfastRequest("", "", null, null, null));
+
+            // Assert
+            Assert.IsInstanceOfType<ErrorOr<Breakfast>>(result);
+            Assert.IsNull(result.Value);
+            Assert.IsTrue(result.IsError);
+            Assert.IsTrue(result.ErrorsOrEmptyList.Count == 1);
+        }
+
+        [TestMethod]
+        public void From_WithCreateBreakfastRequest_ReturnListError()
+        {
+            // Arrange
+            var breakfastServiceMock = new Mock<IBreakfastService>();
+            breakfastServiceMock.Setup(service => service.From(It.IsAny<CreateBreakfastRequest>())
+                    ).Returns(new List<Error>() { new Error(), new Error() });
+
+            var serviceUnderTest = breakfastServiceMock.Object;
+
+            // Act
+            var result = serviceUnderTest.From(new CreateBreakfastRequest("", "", null, null, null));
+
+            // Assert
+            Assert.IsInstanceOfType<ErrorOr<Breakfast>>(result);
+            Assert.IsNull(result.Value);
+            Assert.IsTrue(result.IsError);
+            Assert.IsTrue(result.ErrorsOrEmptyList.Count >= 2);
+        }
+
+        [TestMethod]
+        public void From_WithIdAndUpsertBreakfastRequest_ReturnBreakfast()
+        {
+            // Arrange
+            var breakfastServiceMock = new Mock<IBreakfastService>();
+            var breakfast = new Breakfast(Guid.NewGuid(), "", "", null, null, null);
+            breakfastServiceMock.Setup(service => service.From(
+                    It.IsAny<Guid>(),
+                    It.IsAny<UpsertBreakfastRequest>()
+                    ))
+                .Returns(breakfast);
+
+            var serviceUnderTest = breakfastServiceMock.Object;
+
+            // Act
+            var result = serviceUnderTest.From(Guid.NewGuid(), new UpsertBreakfastRequest("", "", null, null, null));
+
+            // Assert
+            Assert.IsInstanceOfType<ErrorOr<Breakfast>>(result);
+            Assert.IsInstanceOfType<Breakfast>(result.Value);
+            Assert.IsFalse(result.IsError);
+            Assert.IsTrue(result.ErrorsOrEmptyList.Count == 0);
+        }
+
+        [TestMethod]
+        public void From_WithIdAndUpsertBreakfastRequest_ReturnError()
+        {
+            // Arrange
+            var breakfastServiceMock = new Mock<IBreakfastService>();
+            breakfastServiceMock.Setup(service => service.From(
+                    It.IsAny<Guid>(),
+                    It.IsAny<UpsertBreakfastRequest>()
+                    ))
+                .Returns(new Error());
+
+            var serviceUnderTest = breakfastServiceMock.Object;
+
+            // Act
+            var result = serviceUnderTest.From(Guid.NewGuid(), new UpsertBreakfastRequest("", "", null, null, null));
+
+            // Assert
+            Assert.IsInstanceOfType<ErrorOr<Breakfast>>(result);
+            Assert.IsNull(result.Value);
+            Assert.IsTrue(result.IsError);
+            Assert.IsTrue(result.ErrorsOrEmptyList.Count == 1);
+        }
+
+        [TestMethod]
+        public void From_WithIdAndUpsertBreakfastRequest_ReturnListError()
+        {
+            // Arrange
+            var breakfastServiceMock = new Mock<IBreakfastService>();
+            breakfastServiceMock.Setup(service => service.From(
+                    It.IsAny<Guid>(),
+                    It.IsAny<UpsertBreakfastRequest>()
+                    ))
+                .Returns(new List<Error>() { new Error(), new Error() });
+
+            var serviceUnderTest = breakfastServiceMock.Object;
+
+            // Act
+            var result = serviceUnderTest.From(Guid.NewGuid(), new UpsertBreakfastRequest("", "", null, null, null));
+
+            // Assert
+            Assert.IsInstanceOfType<ErrorOr<Breakfast>>(result);
+            Assert.IsNull(result.Value);
+            Assert.IsTrue(result.IsError);
+            Assert.IsTrue(result.ErrorsOrEmptyList.Count >= 2);
+        }
+        #endregion From Tests
+
         #endregion IBreakfastService Tests
     }
 }

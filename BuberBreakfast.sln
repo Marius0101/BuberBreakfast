@@ -7,7 +7,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BreakfastAPI", "BreakfastAP
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BreakfastAPI.Contracts", "BreakfastAPI.Contracts\BreakfastAPI.Contracts.csproj", "{86ADC14D-93E0-4161-98EA-0FCB97FE832C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BreakfastAPI.Test", "BreakfastAPI.Test\BreakfastAPI.Test.csproj", "{5D9CFB7A-D6CA-40EF-9366-680004A3A864}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BreakfastAPI.UnitTest", "BreakfastAPI.Test\BreakfastAPI.UnitTest.csproj", "{5D9CFB7A-D6CA-40EF-9366-680004A3A864}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

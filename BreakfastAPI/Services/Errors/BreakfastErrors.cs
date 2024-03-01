@@ -12,7 +12,7 @@ namespace BreakfastAPI.Services.Errors;
         );
 
         public static Error InvalidDescription => Error.Validation(
-            code:           "Breakfast.Description",
+            code:           "Breakfast.InvalidDescription",
             description:    $"The breakfast description should be between {Models.Breakfast.minDescriptionLenght} and " +
             $"{Models.Breakfast.maxDescriptionLenght}."
         );

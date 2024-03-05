@@ -21,4 +21,17 @@ namespace BreakfastAPI.Services.Errors;
             code:           "Breakfast.NotFound",
             description:    "The breakfast was not found in the database."
         );
-    }
+
+        public static Error ConflictExistingID => Error.Conflict(
+            code: "Breakfast.Id.Conflict",
+            description: "The guid id is already in database"
+        );
+        public static Error FailureBreakfastNull => Error.Failure(
+                code: "Breakfast.Null",
+                description: "Invalid breakfast data: null breakfast"
+        );
+        public static Error FailureBreakfastIdNull => Error.Failure(
+            code: "Breakfast.Id.Null",
+            description: "Invalid breakfast data: null id"
+        );
+}

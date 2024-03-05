@@ -26,4 +26,8 @@
     <ProjectReference Include="..\BreakfastAPI\BreakfastAPI.csproj" />
   </ItemGroup>
 
+	<PropertyGroup>
+		<OutputPath>..\testBin\</OutputPath>
+		<AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+	</PropertyGroup>
 </Project>

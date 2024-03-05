@@ -1,3 +1,4 @@
+using BreakfastAPI.Contracts.Common;
 
 namespace BreakfastAPI.Contracts.Breakfast
 {
@@ -5,9 +6,7 @@ namespace BreakfastAPI.Contracts.Breakfast
         Guid Id,
         string Name,
         string Description,
-        DateTime StartDateTime,
-        DateTime EndDateTime,
-        DateTime LastUpdateTime,
+        TimeInterval Availability,
         List<string> Savory,
         List<string> Sweet
     );

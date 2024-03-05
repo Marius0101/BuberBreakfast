@@ -1,40 +1,70 @@
-using ErrorOr;
+﻿using BreakfastAPI.Contracts.Breakfast;
+using BreakfastAPI.Contracts.Common;
 using BreakfastAPI.Models;
-using BreakfastAPI.Contracts.Breakfast;
+using ErrorOr;
 
-namespace BreakfastAPI.Services.Breakfasts;
-
-public class BreakfastService: IBreakfeastService
+namespace BreakfastAPI.Services.Breakfasts
 {
-    private static readonly Dictionary<Guid, Breakfast> _breakfasts = new();
-    public ErrorOr<Created> CreateBreakfast(Breakfast breakfast)
+    public class BreakfastService : IBreakfastService
     {
-        _breakfasts.Add(breakfast.Id, breakfast);
+        public ErrorOr<Breakfast> Create(
+            string name,
+            string description,
+            TimeInterval availability,
+            List<string> savory,
+            List<string> sweet,
+            Guid? id = null
 
-        return Result.Created;
-    }
+        )
+        {
+            List<Error> errors = [];
 
-    public ErrorOr<Deleted> DeleteBreakfast(Guid id)
-    {
-        _breakfasts.Remove(id);
+            if (name.Length < Breakfast.minNameLenght || name.Length > Breakfast.maxNameLenght)
+            {
+                errors.Add(Errors.BreakfastErrors.InvalidName);
+            }
 
-        return Result.Deleted;
-    }
+            if (description.Length < Breakfast.minDescriptionLenght || description.Length > Breakfast.maxDescriptionLenght)
+            {
+                errors.Add(Errors.BreakfastErrors.InvalidDescription);
+            }
 
-    public ErrorOr<Breakfast> GetBreakfast(Guid breakfastId){
+            if (errors.Count > 0)
+            {
+                return errors;
+            }
+            return new Breakfast(
 
-        if(_breakfasts.TryGetValue(breakfastId, out var breakfast)){
-            return breakfast;
+                id ?? Guid.NewGuid(),
+                name,
+                description,
+                availability,
+                savory,
+                sweet
+            );
         }
-        return Errors.Errors.Breakfast.NotFound;
-    }
 
-    public ErrorOr<UpsertBreakfastResponse> UpsertBreakfast(Breakfast breakfast)
-    {
-        var isNewlyCreated = !_breakfasts.ContainsKey(breakfast.Id);
+        public ErrorOr<Breakfast> From(CreateBreakfastRequest request)
+        {
+            return Create(
+                request.Name,
+                request.Description,
+                availability: request.Availability,
+                request.Savory,
+                request.Sweet
+            );
+        }
 
-        _breakfasts[breakfast.Id] = breakfast;
-
-        return new UpsertBreakfastResponse(isNewlyCreated);
+        public ErrorOr<Breakfast> From(Guid id, UpsertBreakfastRequest request)
+        {
+            return Create(
+                request.Name,
+                request.Description,
+                availability: request.Availability,
+                request.Savory,
+                request.Sweet,
+                id
+            );
+        }
     }
 }

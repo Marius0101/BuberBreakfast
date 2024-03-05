@@ -1,0 +1,34 @@
+on:
+    push:
+        branches:
+            - '**' 
+    workflow_dispatch:
+jobs:
+    Build_and_unit_test:
+
+        runs-on: [windows-latest]
+
+        steps:
+            - name: Checkout
+              uses: actions/checkout@v4
+              with:
+                fetch-depth: 0
+
+            - name: Install .NET Core
+              uses: actions/setup-dotnet@v3
+              with:
+                dotnet-version: 8.0.x
+
+            - name: Build project 
+              run: dotnet build
+                            
+            - name: Coverlet coverage test
+              uses: b3b00/coverlet-action@1.3.0
+              with:
+                testProject: ${{vars.TEST_PATH}}
+                output: "coverage.xml"
+                outputFormat: 'opencover'
+            
+
+
+            

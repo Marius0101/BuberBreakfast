@@ -28,14 +28,7 @@ jobs:
                 testProject: ${{vars.TEST_PATH}}
                 output: "coverage.xml"
                 outputFormat: 'opencover'
-            
-            - name: Create test report
-              uses: dorny/test-reporter@v1
-              with:
-                name: View unit test report
-                path: reports/jest-*.xml    # Path to test results
-                reporter:  dotnet-trx
-            
+
 
 
             

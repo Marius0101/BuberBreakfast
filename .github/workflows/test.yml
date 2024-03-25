@@ -8,4 +8,4 @@ jobs:
         runs-on: [windows-latest]
         steps:
             - name: Adding markdown
-              run: echo '### Hello world! 🚀' >> $GITHUB_STEP_SUMMARY
+              run: echo "### Hello world! 🚀" >> $GITHUB_STEP_SUMMARY

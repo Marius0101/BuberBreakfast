@@ -1,7 +1,7 @@
 on:
     push:
         branches:
-            - '**' 
+            - 'dev' 
     workflow_dispatch:
 jobs:
     Build_and_unit_test:
@@ -29,8 +29,7 @@ jobs:
                 output: "coverage.xml"
                 outputFormat: 'opencover'
                 steps:
-            - name: Adding markdown
-              run: echo '### Hello world! 🚀' >> $GITHUB_STEP_SUMMARY
+            
             
             
 

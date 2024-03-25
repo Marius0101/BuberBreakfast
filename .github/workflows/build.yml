@@ -28,7 +28,11 @@ jobs:
                 testProject: ${{vars.TEST_PATH}}
                 output: "coverage.xml"
                 outputFormat: 'opencover'
-
+                steps:
+            - name: Adding markdown
+              run: echo '### Hello world! 🚀' >> $GITHUB_STEP_SUMMARY
+            
+            
 
 
             

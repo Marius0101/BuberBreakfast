@@ -5,7 +5,9 @@ on:
     workflow_dispatch:
 jobs:
     test:
-        runs-on: [ubuntu-latest]
+        runs-on: [windows-latest]
         steps:
             - name: Adding markdown
               run: echo "### Hello world! 🚀" >> $GITHUB_STEP_SUMMARY
+              shell: bash
+

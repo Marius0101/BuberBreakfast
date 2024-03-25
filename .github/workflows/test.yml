@@ -7,6 +7,13 @@ jobs:
     test:
         runs-on: [windows-latest]
         steps:
+            - name: Create new file
+              run: New-Item -Path "newfile.txt" -ItemType "file"
+            - name: Adding markdown
+              uses: actions/upload-artifact@v4
+              with:
+                name: my-artifact
+                path: ./
             - name: Adding markdown
               run: echo "### Hello world! 🚀" >> $GITHUB_STEP_SUMMARY
               shell: bash

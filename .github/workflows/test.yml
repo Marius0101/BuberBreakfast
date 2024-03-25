@@ -17,4 +17,8 @@ jobs:
             - name: Adding markdown
               run: echo "### Hello world! 🚀" >> $GITHUB_STEP_SUMMARY
               shell: bash
+            - name: Update HTML
+              run: |
+                echo "<p>Artefactele încărcate: ${{ github.event.inputs.name }}</p>" >> index.html
+              shell: bash
 

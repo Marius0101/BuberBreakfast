@@ -18,6 +18,10 @@ services:
       context: .
       dockerfile: BreakfastAPI/Dockerfile
       target: unittest
+    volumes:
+        - ./TestResult:/TestResults
+    #for debug propose
+    #command: tail -F anything 
   breakfastapi_publish:
     image: breakfastapi_publish
     container_name: BreakfastAPI_Publish

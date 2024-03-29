@@ -9,23 +9,20 @@ EXPOSE 8081
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 ARG BUILD_CONFIGURATION=Release
 WORKDIR /src
-COPY ["BreakfastAPI/BreakfastAPI.csproj", "BreakfastAPI/"]
-COPY ["BreakfastAPI.Contracts/BreakfastAPI.Contracts.csproj", "BreakfastAPI.Contracts/"]
-RUN dotnet restore "./BreakfastAPI/./BreakfastAPI.csproj"
 COPY . .
-WORKDIR "/src/BreakfastAPI"
-RUN dotnet build "./BreakfastAPI.csproj" -c $BUILD_CONFIGURATION -o /app/build
+RUN dotnet restore "./BreakfastAPI/./BreakfastAPI.csproj"
+RUN dotnet restore "./BreakfastAPI.Test/./BreakfastAPI.UnitTest.csproj"
+RUN dotnet build "./BreakfastAPI/BreakfastAPI.csproj" --no-restore -c $BUILD_CONFIGURATION -o /app/build
 
 FROM build AS publish
 ARG BUILD_CONFIGURATION=Release
 RUN dotnet publish "./BreakfastAPI.csproj" -c $BUILD_CONFIGURATION -o /app/publish /p:UseAppHost=false
 
+
 FROM build AS unittest
 ARG BUILD_CONFIGURATION=Release
-WORKDIR /src
-COPY ["BreakfastAPI.Test/BreakfastAPI.UnitTest.csproj", "BreakfastAPI.UnitTest/"]
-RUN dotnet test "./BreakfastAPI.UnitTest/BreakfastAPI.UnitTest.csproj"
-
+RUN dotnet test "./BreakfastAPI.Test/BreakfastAPI.UnitTest.csproj" --no-restore --collect:"XPlat Code Coverage" --logger "trx;LogFileName=UnitTestResult.trx"
+CMD ./docker_scripts/copy_artifacts.sh -t "unitTest"
 
 FROM base AS final
 WORKDIR /app

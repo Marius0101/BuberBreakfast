@@ -2,5 +2,6 @@ version: '3.4'
 
 services:
   runtime:
+    container_name: BreakfastAPIDevelopment
     environment:
       - ASPNETCORE_ENVIRONMENT=Development

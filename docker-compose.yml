@@ -29,3 +29,5 @@ services:
       context: .
       dockerfile: BreakfastAPI/Dockerfile
       target: publish
+    volumes:
+      - ./Publish:/Publish

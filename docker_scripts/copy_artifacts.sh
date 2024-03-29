@@ -45,11 +45,16 @@ MoveArtifacts()
         echo "Moving unit test results"
         cp -r /src/BreakfastAPI.Test/TestResults /TestResults
         chmod 666 /src/BreakfastAPI.Test/TestResults
+    elif [ "$Artifacts" = "publish" ]; 
+    then
+        echo "Moving publish files"
+        cp -r ../app/publish /Publish
+        chmod 666 ../app/publish
     fi
 }
 
 #-------
-ValidArtifactsList=("unitTest" "altArtifact")
+ValidArtifactsList=("unitTest" "publish")
 Artifacts=""
 
 if [ $# -eq 0 ];

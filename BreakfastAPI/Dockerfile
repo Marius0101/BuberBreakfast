@@ -16,8 +16,8 @@ RUN dotnet build "./BreakfastAPI/BreakfastAPI.csproj" --no-restore -c $BUILD_CON
 
 FROM build AS publish
 ARG BUILD_CONFIGURATION=Release
-RUN dotnet publish "./BreakfastAPI.csproj" -c $BUILD_CONFIGURATION -o /app/publish /p:UseAppHost=false
-
+RUN dotnet publish "./BreakfastAPI/BreakfastAPI.csproj" --no-restore -c $BUILD_CONFIGURATION -o /app/publish /p:UseAppHost=false
+CMD ./docker_scripts/copy_artifacts.sh -t "publish"
 
 FROM build AS unittest
 ARG BUILD_CONFIGURATION=Release

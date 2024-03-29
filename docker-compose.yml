@@ -1,7 +1,7 @@
 version: '3.4'
 
 services:
-  breakfastapi:
+  runtime:
     image: breakfastapi
     container_name: BreakfastAPI
     ports:
@@ -10,8 +10,8 @@ services:
     build:
       context: .
       dockerfile: BreakfastAPI/Dockerfile
-      target: final
-  breakfastapi_unittest:
+      target: runtime
+  unittest:
     image: breakfastapi_unittest
     container_name: BreakfastAPI_UnitTest
     build:
@@ -22,7 +22,7 @@ services:
         - ./TestResult:/TestResults
     #for debug propose
     #command: tail -F anything 
-  breakfastapi_publish:
+  publish:
     image: breakfastapi_publish
     container_name: BreakfastAPI_Publish
     build:

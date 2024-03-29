@@ -24,7 +24,7 @@ ARG BUILD_CONFIGURATION=Release
 RUN dotnet test "./BreakfastAPI.Test/BreakfastAPI.UnitTest.csproj" --no-restore --collect:"XPlat Code Coverage" --logger "trx;LogFileName=UnitTestResult.trx"
 CMD ./docker_scripts/copy_artifacts.sh -t "unitTest"
 
-FROM base AS final
+FROM base AS runtime
 WORKDIR /app
 COPY --from=publish /app/publish .
 ENTRYPOINT ["dotnet", "BreakfastAPI.dll"]

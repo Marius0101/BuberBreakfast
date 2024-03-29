@@ -3,3 +3,4 @@ obj
 bin
 testbin
 .sonarqube/
+TestResults/

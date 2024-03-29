@@ -20,11 +20,12 @@ FROM build AS publish
 ARG BUILD_CONFIGURATION=Release
 RUN dotnet publish "./BreakfastAPI.csproj" -c $BUILD_CONFIGURATION -o /app/publish /p:UseAppHost=false
 
-FROM build AS test
+FROM build AS unittest
 ARG BUILD_CONFIGURATION=Release
 WORKDIR /src
-COPY ["BreakfastAPI/BreakfastAPI.UnitTest.csproj", "BreakfastAPI.UnitTest/"]
-RUN dotnet test "./BreakfastAPI.UnitTest.csproj"
+COPY ["BreakfastAPI.Test/BreakfastAPI.UnitTest.csproj", "BreakfastAPI.UnitTest/"]
+RUN dotnet test "./BreakfastAPI.UnitTest/BreakfastAPI.UnitTest.csproj"
+
 
 FROM base AS final
 WORKDIR /app

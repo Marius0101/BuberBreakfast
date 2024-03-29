@@ -1,20 +1,12 @@
-﻿using BreakfastAPI.Contracts.Breakfast;
-using BreakfastAPI.Controllers;
-using BreakfastAPI.Models;
+﻿using BreakfastAPI.Models;
 using BreakfastAPI.Services.Breakfasts;
 using ErrorOr;
-using Microsoft.AspNetCore.Mvc;
-using Moq;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+
 
 namespace BreakfastAPI.UnitTest
 {
     [TestClass]
-    public class Service
+    public class ServiceTest
     {
         #region BreakfastControllerService Tests
 

@@ -14,7 +14,7 @@ using System.Threading.Tasks;
 namespace BreakfastAPI.UnitTest
 {
     [TestClass]
-    public class Interface
+    public class InterfaceTest
     {
         #region IBreakfastControllerService Tests
 

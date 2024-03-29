@@ -14,7 +14,7 @@ using System.Xml.Linq;
 namespace BreakfastAPI.UnitTest
 {
     [TestClass]
-    public class Controller
+    public class ControllerTest
     {
         [TestMethod]
         public void GetBreakfastByID_Return200WithItem()

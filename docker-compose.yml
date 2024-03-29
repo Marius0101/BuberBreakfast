@@ -3,6 +3,7 @@ version: '3.4'
 services:
   breakfastapi:
     image: breakfastapi
+    container_name: BreakfastAPI
     ports:
       - "80:8080"
       - "81:8081"
@@ -12,7 +13,15 @@ services:
       target: final
   breakfastapi_unittest:
     image: breakfastapi_unittest
+    container_name: BreakfastAPI_UnitTest
     build:
       context: .
       dockerfile: BreakfastAPI/Dockerfile
-      target: test
+      target: unittest
+  breakfastapi_publish:
+    image: breakfastapi_publish
+    container_name: BreakfastAPI_Publish
+    build:
+      context: .
+      dockerfile: BreakfastAPI/Dockerfile
+      target: publish
